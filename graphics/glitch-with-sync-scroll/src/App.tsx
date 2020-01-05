@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { render } from "react-dom";
-import { Canvas, useFrame } from "react-three-fiber";
+import useScrollPosition, { IScrollPos } from "./hooks/useScrollPosition";
+import { Canvas, extend, useFrame, useThree } from "react-three-fiber";
 import * as THREE from "three";
 
 const Box: React.FC = () => {
@@ -20,6 +21,15 @@ const Box: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [scrollPos, setScrollPos] = useState<IScrollPos>({ x: 0, y: 0 });
+
+  useScrollPosition(
+    ({ prevPos, currPos }: { prevPos: IScrollPos; currPos: IScrollPos }) => {
+      setScrollPos(currPos);
+    },
+    []
+  );
+
   return (
     <Canvas>
       <ambientLight />
