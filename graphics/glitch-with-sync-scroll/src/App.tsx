@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import { render } from "react-dom";
 import useScrollPosition, { IScrollPos } from "./hooks/useScrollPosition";
-import { Canvas, extend, useFrame, useThree } from "react-three-fiber";
+import { Canvas, useFrame } from "react-three-fiber";
+import Effect from "./Effect";
 import * as THREE from "three";
 
 const Box: React.FC = () => {
@@ -31,11 +32,18 @@ const App: React.FC = () => {
   );
 
   return (
-    <Canvas>
-      <ambientLight />
-      <pointLight position={[10, 0, 10]} intensity={1} />
-      <Box />
-    </Canvas>
+    <>
+      <div id="scroll-layer">A</div>
+      <div id="scroll-data">Scroll: {scrollPos.y} </div>
+      <div id="bg">
+        <Canvas>
+          <ambientLight />
+          <pointLight position={[10, 0, 10]} intensity={1} />
+          <Box />
+          <Effect scrollPos={scrollPos} />
+        </Canvas>
+      </div>
+    </>
   );
 };
 
