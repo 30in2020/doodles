@@ -8,6 +8,8 @@ declare global {
       effectComposer: any;
       renderPass: any;
       glitchPass: any;
+      filmPass: any;
+      halftonePass: any;
     }
   }
 }

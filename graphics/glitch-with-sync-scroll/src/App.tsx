@@ -3,7 +3,9 @@ import { render } from "react-dom";
 import useScrollPosition, { IScrollPos } from "./hooks/useScrollPosition";
 import { Canvas, useFrame } from "react-three-fiber";
 import Effect from "./Effect";
+import { map } from "./utils/";
 import * as THREE from "three";
+import { Color } from "three";
 
 const Box: React.FC = () => {
   const ref = useRef<THREE.Mesh>();
@@ -16,7 +18,7 @@ const Box: React.FC = () => {
   return (
     <mesh ref={ref}>
       <boxGeometry attach="geometry" args={[1, 1]} />
-      <meshStandardMaterial attach="material" color={0xfe9966} />
+      <meshStandardMaterial attach="material" color={0x203020} />
     </mesh>
   );
 };
@@ -37,8 +39,11 @@ const App: React.FC = () => {
       <div id="scroll-data">Scroll: {scrollPos.y} </div>
       <div id="bg">
         <Canvas>
-          <ambientLight />
-          <pointLight position={[10, 0, 10]} intensity={1} />
+          <ambientLight intensity={0.8} />
+          <pointLight
+            position={[10, 0, 10]}
+            intensity={map(-1 * scrollPos.y, 0, 1694, 3, 0.3)}
+          />
           <Box />
           <Effect scrollPos={scrollPos} />
         </Canvas>
