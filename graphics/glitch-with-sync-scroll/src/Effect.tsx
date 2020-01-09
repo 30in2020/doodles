@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
-import useScrollPosition, { IScrollPos } from "./hooks/useScrollPosition";
+import { IScrollPos, IData } from "./types/interface";
+import useScrollPosition from "./hooks/useScrollPosition";
 import {
   Canvas,
   extend as extendThree,
@@ -19,6 +20,7 @@ extendThree({ EffectComposer, RenderPass, GlitchPass, HalftonePass, FilmPass });
 
 interface IEffect {
   scrollPos: IScrollPos;
+  data: IData;
 }
 
 const Effect: React.FC<IEffect> = ({ scrollPos }) => {
