@@ -23,7 +23,7 @@ interface IEffect {
   data: IData;
 }
 
-const Effect: React.FC<IEffect> = ({ scrollPos }) => {
+const Effect: React.FC<IEffect> = ({ scrollPos, data }) => {
   const composer = useRef<EffectComposer>();
   const { scene, gl, size, camera } = useThree();
   const aspect = useMemo(() => new THREE.Vector2(size.width, size.height), [
@@ -45,7 +45,13 @@ const Effect: React.FC<IEffect> = ({ scrollPos }) => {
       <renderPass attachArray="passes" scene={scene} camera={camera} />
       <glitchPass
         attachArray="passes"
-        factor={map(-1 * scrollPos.y, 0, 1694, 1, 0)}
+        uniforms-seed-value={data.seed}
+        uniforms-amount-value={data.amount}
+        uniforms-angle-value={data.angle}
+        uniforms-distortion_x-value={data.distortion_x}
+        uniforms-distortion_y-value={data.distortion_y}
+        uniforms-seed_x-value={data.seed_x}
+        uniforms-seed_y-value={data.seed_y}
         renderToScreen
       />
       <halftonePass

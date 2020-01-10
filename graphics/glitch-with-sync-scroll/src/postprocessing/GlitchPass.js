@@ -34,26 +34,30 @@ var GlitchPass = function(dt_size) {
   this.quad = new Mesh(new PlaneBufferGeometry(2, 2), null);
   this.quad.frustumCulled = false; // Avoid getting clipped
   this.scene.add(this.quad);
-  this.factor = 0;
+  this.data = {
+    seed: 0.02,
+    amount: 0.08,
+    angle: 0.02,
+    distortion_x: 0.5, // 0~1
+    distortion_y: 0.6,
+    seed_x: 0.02, // -1~1
+    seed_y: 0.02 // -1~1
+  };
 };
 
 GlitchPass.prototype = Object.assign(Object.create(Pass.prototype), {
   constructor: GlitchPass,
 
   render: function(renderer, writeBuffer, readBuffer, deltaTime, maskActive) {
-    const factor = Math.max(0, this.factor);
-    this.uniforms["tDiffuse"].value = readBuffer.texture;
-    this.uniforms["seed"].value = Math.random() * factor; //default seeding
     this.uniforms["byp"].value = 0;
-    if (factor) {
-      this.uniforms["amount"].value = (Math.random() / 90) * factor;
-      this.uniforms["angle"].value =
-        _Math.randFloat(-Math.PI, Math.PI) * factor;
-      this.uniforms["distortion_x"].value = _Math.randFloat(0, 1) * factor;
-      this.uniforms["distortion_y"].value = _Math.randFloat(0, 1) * factor;
-      this.uniforms["seed_x"].value = _Math.randFloat(-0.3, 0.3) * factor;
-      this.uniforms["seed_y"].value = _Math.randFloat(-0.3, 0.3) * factor;
-    } else this.uniforms["byp"].value = 1;
+    this.uniforms["tDiffuse"].value = readBuffer.texture;
+    this.uniforms["seed"].value = Math.random() * this.data.seed;
+    this.uniforms["amount"].value = this.data.amount;
+    this.uniforms["angle"].value = this.data.angle;
+    this.uniforms["distortion_x"].value = this.data.distortion_x;
+    this.uniforms["distortion_y"].value = this.data.distortion_y;
+    this.uniforms["seed_x"].value = this.data.seed_x;
+    this.uniforms["seed_y"].value = this.data.seed_y;
     this.quad.material = this.material;
     if (this.renderToScreen) {
       renderer.setRenderTarget(null);

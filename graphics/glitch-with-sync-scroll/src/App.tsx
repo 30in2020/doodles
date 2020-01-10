@@ -27,7 +27,14 @@ const Box: React.FC<{ data: IData }> = ({ data }) => {
 const App: React.FC = () => {
   const [data, setData] = useState<IData>({
     ambientLightIntensity: 0.2,
-    boxColor: "#2FA1D6"
+    boxColor: "#2FA1D6",
+    seed: 0.02,
+    amount: 0.08,
+    angle: 0.02,
+    distortion_x: 0.5, // 0~1
+    distortion_y: 0.6,
+    seed_x: 0.02, // -1~1
+    seed_y: 0.02 // -1~1
   });
 
   const [scrollPos, setScrollPos] = useState<IScrollPos>({ x: 0, y: 0 });
