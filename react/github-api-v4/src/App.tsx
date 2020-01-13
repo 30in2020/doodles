@@ -1,5 +1,6 @@
 import React from "react";
 import Fetch from "./Fetch";
+import V3Fetch from "./V3Fetch";
 
 const App: React.FC = () => {
   return (
@@ -99,6 +100,12 @@ const App: React.FC = () => {
           }
         }
         `}
+      />
+      <V3Fetch
+        url={
+          "repos/30in2020/doodles/commits/c8a177cdb894d19b9fcfdad223a76bb4c64c1bb7"
+        }
+        label="Get Commit Patch Result"
       />
     </div>
   );
