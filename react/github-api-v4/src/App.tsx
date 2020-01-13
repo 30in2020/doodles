@@ -52,8 +52,10 @@ const App: React.FC = () => {
           query {
             viewer {
               repository(name: "doodles") { 
-                languages(first: 10) {
+                languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                  totalSize
                   edges {
+                    size
                     node {
                       color
                       id
