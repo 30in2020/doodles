@@ -1,5 +1,8 @@
 import React from "react";
 import useSWR from "swr";
+import * as Diff2Html from "diff2html";
+import { LineMatchingType } from "diff2html/lib/types";
+import "diff2html/bundles/css/diff2html.min.css";
 
 console.log(process.env.REACT_APP_API_TOKEN);
 
@@ -16,7 +19,7 @@ const V3Fetch: React.FC<IProps> = ({ url, label }) => {
         method: "GET",
         headers: {
           Authorization: `token ${process.env.REACT_APP_API_TOKEN}`,
-          Accept: "application/vnd.github.v3",
+          Accept: "application/vnd.github.v3+json",
           "Content-Type": "application/json"
         }
       }).then((res: Response) => res.json()),
@@ -42,6 +45,14 @@ const V3Fetch: React.FC<IProps> = ({ url, label }) => {
             return (
               <>
                 <pre>{JSON.stringify(el, null, 2)}</pre>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: Diff2Html.html(el.patch, {
+                      drawFileList: true,
+                      matching: LineMatchingType.LINES
+                    })
+                  }}
+                />
               </>
             );
           })}
