@@ -19,10 +19,10 @@ const V3Fetch: React.FC<IProps> = ({ url, label }) => {
         method: "GET",
         headers: {
           Authorization: `token ${process.env.REACT_APP_API_TOKEN}`,
-          Accept: "application/vnd.github.v3+json",
-          "Content-Type": "application/json"
+          Accept: "application/vnd.github.v3.diff+json",
+          "Content-Type": "application/vnd.github.v3.diff"
         }
-      }).then((res: Response) => res.json()),
+      }).then((res: Response) => res.text()),
     {
       // you can also override the global option
       //refreshInterval: 3000
@@ -30,7 +30,7 @@ const V3Fetch: React.FC<IProps> = ({ url, label }) => {
   );
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -40,22 +40,14 @@ const V3Fetch: React.FC<IProps> = ({ url, label }) => {
         <div>loading...</div>
       ) : (
         <>
-          {data.files.map((el: any) => {
-            console.log(el.patch);
-            return (
-              <>
-                <pre>{JSON.stringify(el, null, 2)}</pre>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: Diff2Html.html(el.patch, {
-                      drawFileList: true,
-                      matching: LineMatchingType.LINES
-                    })
-                  }}
-                />
-              </>
-            );
-          })}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: Diff2Html.html(data, {
+                drawFileList: true,
+                matching: LineMatchingType.LINES
+              })
+            }}
+          />
         </>
       )}
     </div>
