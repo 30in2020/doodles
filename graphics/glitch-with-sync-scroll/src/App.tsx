@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo, ReactChild } from "react";
 import { render } from "react-dom";
 import useScrollPosition from "./hooks/useScrollPosition";
 import { IScrollPos, IData } from "./types/interface";
-import { Canvas, useFrame } from "react-three-fiber";
+import { Canvas, useFrame, useThree } from "react-three-fiber";
 import Effect from "./Effect";
 import { map } from "./utils/";
 import * as THREE from "three";
@@ -23,6 +23,52 @@ const Box: React.FC<{ data: IData }> = ({ data }) => {
     </mesh>
   );
 };
+
+/** This renders text via canvas and projects it as a sprite */
+function Text({
+  children,
+  position,
+  opacity = 1,
+  color = "white",
+  fontSize = 410
+}: {
+  children: string;
+  position: number[];
+  opacity?: number;
+  color?: string;
+  fontSize?: number;
+}) {
+  const {
+    size: { width, height },
+    viewport: { width: viewportWidth, height: viewportHeight }
+  } = useThree();
+  const scale = viewportWidth > viewportHeight ? viewportWidth : viewportHeight;
+  const canvas = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 2048;
+    const context = canvas.getContext("2d");
+    if (context !== null) {
+      context.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif`;
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillStyle = color;
+      context.fillText(children, 1024, 1024 - 410 / 2);
+    }
+    return canvas;
+  }, [children, width, height]);
+  return (
+    <sprite scale={[scale, scale, 1]} position={position}>
+      <spriteMaterial attach="material" transparent opacity={opacity}>
+        <canvasTexture
+          attach="map"
+          image={canvas}
+          premultiplyAlpha
+          onUpdate={s => (s.needsUpdate = true)}
+        />
+      </spriteMaterial>
+    </sprite>
+  );
+}
 
 const App: React.FC = () => {
   const [data, setData] = useState<IData>({
@@ -58,6 +104,9 @@ const App: React.FC = () => {
             intensity={map(-1 * scrollPos.y, 0, 1694, 3, 0.3)}
           />
           <Box data={data} />
+          <Text position={[0, 0, map(-1 * scrollPos.y, 0, 1694, 0, -30)]}>
+            30in2020
+          </Text>
           <Effect data={data} scrollPos={scrollPos} />
         </Canvas>
       </div>

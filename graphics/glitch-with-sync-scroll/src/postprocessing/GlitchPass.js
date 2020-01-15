@@ -49,9 +49,9 @@ GlitchPass.prototype = Object.assign(Object.create(Pass.prototype), {
   constructor: GlitchPass,
 
   render: function(renderer, writeBuffer, readBuffer, deltaTime, maskActive) {
-    this.uniforms["byp"].value = 0;
+    this.uniforms["byp"].value = 1;
     this.uniforms["tDiffuse"].value = readBuffer.texture;
-    this.uniforms["seed"].value = Math.random() * this.data.seed;
+    this.uniforms["seed"].value = this.data.seed;
     this.uniforms["amount"].value = this.data.amount;
     this.uniforms["angle"].value = this.data.angle;
     this.uniforms["distortion_x"].value = this.data.distortion_x;
