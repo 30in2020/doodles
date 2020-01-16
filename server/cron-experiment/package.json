@@ -9,7 +9,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^8.2.0",
+  },
   "devDependencies": {
     "cron": "^1.7.2"
   }
