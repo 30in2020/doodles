@@ -2,13 +2,24 @@ const env = require("dotenv").config({ path: __dirname + "/../.env" }).parsed;
 const CronJob = require("cron").CronJob;
 const nodeFetch = require("node-fetch");
 
-console.log(env);
+console.log(`\x1b[34m`, `Check today's commits history every one hour.`);
 
-console.log("Before job instantiation");
-const job = new CronJob("*/5 * * * * *", function() {
-  const d = new Date();
-  const url = "repos/30in2020/doodles/commits";
-  nodeFetch(`https://api.github.com/${url}`, {
+const job = new CronJob("0 0 */1 * * *", async () => {
+  const commitArr = await fetchTodaysCommits();
+  if (commitArr.length < 1) {
+    console.error("No commits today, hurry up!");
+  } else {
+    console.log(commitArr);
+    console.log("Good job!");
+  }
+});
+
+const fetchTodaysCommits = async () => {
+  const since = "2020-01-17",
+    until = "2020-01-18",
+    url = `repos/30in2020/doodles/commits?since=${since}T00:00:00Z&until=${until}T00:00:00Z`;
+
+  return nodeFetch(`https://api.github.com/${url}`, {
     method: "GET",
     headers: {
       Authorization: `token ${env.API_TOKEN}`,
@@ -18,8 +29,8 @@ const job = new CronJob("*/5 * * * * *", function() {
   })
     .then((res: any) => res.json())
     .then((payload: any) =>
-      console.log(payload.map((commit: any) => commit.commit.tree.sha))
+      payload.map((commit: any) => commit.commit.tree.sha)
     );
-});
-console.log("After job instantiation");
+};
+
 job.start();
