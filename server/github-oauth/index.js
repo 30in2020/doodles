@@ -8,7 +8,6 @@ const clientSecret = env.CLIENT_SECRET;
 
 app.get("/callback", (req, res) => {
   const requestToken = req.query.code;
-
   axios({
     method: "post",
     url: `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${requestToken}`,
@@ -17,8 +16,7 @@ app.get("/callback", (req, res) => {
     }
   }).then(response => {
     const accessToken = response.data.access_token;
-    console.log(response.data);
-    res.redirect(`/callback/?access_token=${accessToken}`);
+    res.redirect(`/result.html?access_token=${accessToken}`);
   });
 });
 

@@ -19,8 +19,26 @@
     })
       .then(res => res.json())
       .then(res => {
-        const nameNode = document.createTextNode(`Hello, ${res.name}`);
+        if (res.message) {
+          throw res;
+        }
+
+        const nameNode = document.createTextNode(`Hello, ${res.login}`);
         document.body.appendChild(nameNode);
+
+        document.body.appendChild(document.createElement("br"));
+
+        const repoUrlNode = document.createElement("a");
+        repoUrlNode.href = res.repos_url;
+        repoUrlNode.innerText = `Repo URL:  ${res.repos_url}`;
+
+        document.body.appendChild(repoUrlNode);
+      })
+      .catch(e => {
+        const errorNode = document.createTextNode(
+          `Error occured: ${e.message}`
+        );
+        document.body.appendChild(errorNode);
       });
   </script>
 </html>
