@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, ErrorMessage, OnSubmit } from "react-hook-form";
 import * as yup from "yup";
 import { Text, Select, Box, Input, Button } from "@chakra-ui/core";
 
@@ -30,6 +30,39 @@ const defaultValues = {
 };
 
 export default function App() {
+  const onSubmit = ({ name, age, gender }: any) => {
+    console.log(name, age, gender);
+  };
+
+  return (
+    <Box maxW="md" m="6" p="6" border="1px solid #e1e1e1" rounded="lg">
+      <Form defaultValues={defaultValues} onSubmit={onSubmit}>
+        <Box pb="6">
+          <Text mb="8px">Name</Text>
+          <InputComp name="name" />
+
+          <Text mb="8px">Age</Text>
+          <InputComp name="age" />
+
+          <Text mb="8px">Gender</Text>
+          <SelectComp name="gender" options={[GENDER.MALE, GENDER.FEMALE]}>
+            <option value={GENDER.MALE}>male</option>
+            <option value={GENDER.FEMALE}>female</option>
+          </SelectComp>
+        </Box>
+        <Button type="submit" variantColor="teal" variant="solid">
+          Submit
+        </Button>
+      </Form>
+    </Box>
+  );
+}
+
+const Form: React.FC<{
+  defaultValues: object;
+  onSubmit: OnSubmit<FormData>;
+  children: React.ReactNode;
+}> = ({ defaultValues, children, onSubmit }) => {
   const { register, handleSubmit, errors } = useForm<FormData>({
     mode: "onBlur",
     reValidateMode: "onChange",
@@ -37,42 +70,48 @@ export default function App() {
     validationSchema: formSchema,
     submitFocusError: true
   });
-  const onSubmit = handleSubmit(({ name, age, gender }) => {
-    console.log(name, age, gender);
-  });
+
+  console.log(errors);
 
   return (
-    <Box maxW="md" m="6" p="6" border="1px solid #e1e1e1" rounded="lg">
-      <form onSubmit={onSubmit}>
-        <Box pb="6">
-          <Text mb="8px">Name</Text>
-          <Input
-            width="92%"
-            variant="outline"
-            placeholder="Name"
-            name="name"
-            ref={register}
-          />
-          <Text mb="8px">Age</Text>
-          <Input
-            width="92%"
-            variant="outline"
-            placeholder="Age"
-            name="age"
-            ref={register}
-          />
-          <Text mb="8px">Gender</Text>
-          <Select name="gender" variant="filled" ref={register}>
-            <option value={GENDER.MALE}>male</option>
-            <option value={GENDER.FEMALE}>female</option>
-          </Select>
-        </Box>
-        <Button type="submit" variantColor="teal" variant="solid">
-          Submit
-        </Button>
-
-        <pre>{errors && JSON.stringify(errors)}</pre>
-      </form>
-    </Box>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {Array.isArray(children)
+        ? children.map((child: any) => {
+            return child.props.name
+              ? React.createElement(child.type, {
+                  ...{
+                    ...child.props,
+                    register,
+                    key: child.props.name
+                  }
+                })
+              : child;
+          })
+        : children}
+      <pre>{errors && JSON.stringify(errors)}</pre>
+    </form>
   );
-}
+};
+
+const InputComp: React.FC<{
+  register?: React.Ref<HTMLInputElement>;
+  name: string;
+}> = ({ register, name, ...rest }) => {
+  return (
+    <Input name={name} ref={register} width="92%" variant="outline" {...rest} />
+  );
+};
+
+const SelectComp: React.FC<{
+  register?: React.Ref<HTMLSelectElement>;
+  name: string;
+  options: Array<any>;
+}> = ({ register, options, name, ...rest }) => {
+  return (
+    <Select variant="filled" name={name} ref={register} {...rest}>
+      {options.map(value => (
+        <option value={value}>{value}</option>
+      ))}
+    </Select>
+  );
+};
