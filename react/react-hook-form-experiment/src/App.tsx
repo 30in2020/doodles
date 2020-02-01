@@ -1,11 +1,17 @@
 import * as React from "react";
-import { useForm, ErrorMessage, OnSubmit } from "react-hook-form";
+import {
+  FormContext,
+  useFormContext,
+  useForm,
+  ErrorMessage,
+  OnSubmit
+} from "react-hook-form";
 import * as yup from "yup";
 import { Text, Select, Box, Input, Button } from "@chakra-ui/core";
 
 enum GENDER {
-  MALE,
-  FEMALE
+  MALE = "MALE",
+  FEMALE = "FEMALE"
 }
 
 type FormData = {
@@ -39,9 +45,11 @@ export default function App() {
       <Form defaultValues={defaultValues} onSubmit={onSubmit}>
         <Text mb="8px">Name</Text>
         <InputComp name="name" />
+        <ErrorComp errorKey="name" />
 
         <Text mb="8px">Age</Text>
         <InputComp name="age" />
+        <ErrorComp errorKey="age" />
 
         <Text mb="8px">Gender</Text>
         <SelectComp name="gender" options={[GENDER.MALE, GENDER.FEMALE]}>
@@ -62,7 +70,7 @@ const Form: React.FC<{
   onSubmit: OnSubmit<FormData>;
   children: React.ReactNode;
 }> = ({ defaultValues, children, onSubmit }) => {
-  const { register, handleSubmit, errors } = useForm<FormData>({
+  const methods = useForm<FormData>({
     mode: "onBlur",
     reValidateMode: "onChange",
     defaultValues,
@@ -70,25 +78,27 @@ const Form: React.FC<{
     submitFocusError: true
   });
 
-  console.log(errors);
+  const { register, handleSubmit, errors } = methods;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {Array.isArray(children)
-        ? children.map((child: any) => {
-            return child.props.name
-              ? React.createElement(child.type, {
-                  ...{
-                    ...child.props,
-                    register,
-                    key: child.props.name
-                  }
-                })
-              : child;
-          })
-        : children}
-      <pre>{errors && JSON.stringify(errors)}</pre>
-    </form>
+    <FormContext {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {Array.isArray(children)
+          ? children.map((child: any) => {
+              return child.props.name
+                ? React.createElement(child.type, {
+                    ...{
+                      ...child.props,
+                      register,
+                      key: child.props.name
+                    }
+                  })
+                : child;
+            })
+          : children}
+        <pre>{errors && JSON.stringify(errors)}</pre>
+      </form>
+    </FormContext>
   );
 };
 
@@ -107,10 +117,25 @@ const SelectComp: React.FC<{
   options: Array<any>;
 }> = ({ register, options, name, ...rest }) => {
   return (
-    <Select variant="filled" mb="8px" name={name} ref={register} {...rest}>
+    <Select variant="filled" mb="18px" name={name} ref={register} {...rest}>
       {options.map(value => (
-        <option value={value}>{value}</option>
+        <option key={value} value={value}>
+          {value}
+        </option>
       ))}
     </Select>
+  );
+};
+
+const ErrorComp: React.FC<{
+  errorKey: string;
+}> = ({ errorKey, ...rest }) => {
+  const { errors } = useFormContext();
+  return (
+    <ErrorMessage
+      as={<Text color="tomato" />}
+      errors={errors}
+      name={errorKey}
+    />
   );
 };
