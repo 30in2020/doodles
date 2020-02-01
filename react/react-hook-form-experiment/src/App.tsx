@@ -37,19 +37,18 @@ export default function App() {
   return (
     <Box maxW="md" m="6" p="6" border="1px solid #e1e1e1" rounded="lg">
       <Form defaultValues={defaultValues} onSubmit={onSubmit}>
-        <Box pb="6">
-          <Text mb="8px">Name</Text>
-          <InputComp name="name" />
+        <Text mb="8px">Name</Text>
+        <InputComp name="name" />
 
-          <Text mb="8px">Age</Text>
-          <InputComp name="age" />
+        <Text mb="8px">Age</Text>
+        <InputComp name="age" />
 
-          <Text mb="8px">Gender</Text>
-          <SelectComp name="gender" options={[GENDER.MALE, GENDER.FEMALE]}>
-            <option value={GENDER.MALE}>male</option>
-            <option value={GENDER.FEMALE}>female</option>
-          </SelectComp>
-        </Box>
+        <Text mb="8px">Gender</Text>
+        <SelectComp name="gender" options={[GENDER.MALE, GENDER.FEMALE]}>
+          <option value={GENDER.MALE}>male</option>
+          <option value={GENDER.FEMALE}>female</option>
+        </SelectComp>
+
         <Button type="submit" variantColor="teal" variant="solid">
           Submit
         </Button>
@@ -108,7 +107,7 @@ const SelectComp: React.FC<{
   options: Array<any>;
 }> = ({ register, options, name, ...rest }) => {
   return (
-    <Select variant="filled" name={name} ref={register} {...rest}>
+    <Select variant="filled" mb="8px" name={name} ref={register} {...rest}>
       {options.map(value => (
         <option value={value}>{value}</option>
       ))}
