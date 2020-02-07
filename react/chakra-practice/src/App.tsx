@@ -42,25 +42,20 @@ const App: React.FC = () => {
     // </Box>
 
     <Grid
-      // TODO: How to write templateAreas inline?
-      // templateAreas={[
-      //   "header header header header header header header header header header header header",
-      //   "sidebar sidebar sidebar . main main main main main main main main",
-      //   "footer footer footer footer footer footer footer footer footer footer footer footer"
-      // ]}
       className="grid"
-      templateRows="100px 400px 50px"
       templateColumns="repeat(12, 1fr)"
-      gap={6}
+      autoRows="minmax(100px, auto)"
     >
-      <Box gridArea="header" w="100%" bg="blue.500" />
-      <Box gridArea="sidebar" w="100%" bg="red.500">
+      <Box as="nav" gridColumn={["1 / 4", "1 / 4", "1 / 3"]} bg="red.500">
         SideBar
       </Box>
-      <Box gridArea="main" w="100%" bg="yellow.500">
+      <Box
+        as="main"
+        gridColumn={["5 / 13", "5 / 13", "5 / 13"]}
+        bg="yellow.500"
+      >
         Content
       </Box>
-      <Box gridArea="footer" w="100%" bg="green.500" />
     </Grid>
   );
 };
