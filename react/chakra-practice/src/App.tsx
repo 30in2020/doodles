@@ -8,6 +8,7 @@ import {
   CSSReset,
   Grid
 } from "@chakra-ui/core";
+import { Header, SideBar, MainContent, GridLayer } from "./components";
 import customTheme from "./theme";
 import "./App.css";
 
@@ -40,22 +41,16 @@ const App: React.FC = () => {
     //     </Button>
     //   </header>
     // </Box>
-
     <Grid
       className="grid"
       templateColumns="repeat(12, 1fr)"
       autoRows="minmax(100px, auto)"
+      gap={6}
     >
-      <Box as="nav" gridColumn={["1 / 4", "1 / 4", "1 / 3"]} bg="red.500">
-        SideBar
-      </Box>
-      <Box
-        as="main"
-        gridColumn={["5 / 13", "5 / 13", "5 / 13"]}
-        bg="yellow.500"
-      >
-        Content
-      </Box>
+      <GridLayer />
+      <Header />
+      <SideBar />
+      <MainContent />
     </Grid>
   );
 };
