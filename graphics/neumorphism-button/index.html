@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>neumorphism-button</title>
+    <style>
+      button {
+        border: none;
+        margin: 0;
+        padding: 0;
+        width: auto;
+        overflow: visible;
+        background: transparent;
+        /* inherit font & color from ancestor */
+        color: inherit;
+        font: inherit;
+        /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+        line-height: normal;
+        /* Corrects font smoothing for webkit */
+        -webkit-font-smoothing: inherit;
+        -moz-osx-font-smoothing: inherit;
+        /* Corrects inability to style clickable `input` types in iOS */
+        -webkit-appearance: none;
+        outline: none;
+      }
+
+      html,
+      body {
+        background: #b7ef00;
+      }
+      button {
+        color: white;
+        border-radius: 10px;
+        background: #b7ef00;
+        box-shadow: 8px 8px 15px #a1d200, -8px -8px 15px #cdff00;
+        /* inset 8px 8px 15px #a1d200, 
+            inset -8px -8px 15px #cdff00; */
+      }
+      .center-parent {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+      .center-child {
+        width: 300px;
+        height: 100px;
+        padding: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -70px 0 0 -170px;
+      }
+      .keyframe:hover {
+        -webkit-animation: shadowFade 0.45s;
+        animation: shadowFade 0.45s;
+        box-shadow: inset 8px 8px 15px #a1d200, inset -8px -8px 15px #cdff00;
+      }
+
+      @-webkit-keyframes shadowFade {
+        0% {
+          box-shadow: 8px 8px 15px #a1d200, -8px -8px 15px #cdff00;
+        }
+        30% {
+          box-shadow: none;
+        }
+        100% {
+          box-shadow: inset 8px 8px 15px #a1d200, inset -8px -8px 15px #cdff00;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center-parent">
+      <button class="center-child keyframe"></button>
+    </div>
+  </body>
+</html>
