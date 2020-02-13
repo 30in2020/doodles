@@ -54,7 +54,12 @@
         left: 50%;
         margin: -70px 0 0 -170px;
       }
-      .keyframe:hover {
+      .keyframe {
+        -webkit-animation: shadowFadeBack 0.45s;
+        animation: shadowFadeBack 0.45s;
+        box-shadow: 8px 8px 15px #a1d200, -8px -8px 15px #cdff00;
+      }
+      .keyframe-active {
         -webkit-animation: shadowFade 0.45s;
         animation: shadowFade 0.45s;
         box-shadow: inset 8px 8px 15px #a1d200, inset -8px -8px 15px #cdff00;
@@ -71,11 +76,29 @@
           box-shadow: inset 8px 8px 15px #a1d200, inset -8px -8px 15px #cdff00;
         }
       }
+
+      @-webkit-keyframes shadowFadeBack {
+        0% {
+          box-shadow: inset 8px 8px 15px #a1d200, inset -8px -8px 15px #cdff00;
+        }
+        30% {
+          box-shadow: none;
+        }
+        100% {
+          box-shadow: 8px 8px 15px #a1d200, -8px -8px 15px #cdff00;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="center-parent">
       <button class="center-child keyframe"></button>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      $("button").click(function() {
+        $(".keyframe").toggleClass("keyframe-active");
+      });
+    </script>
   </body>
 </html>
